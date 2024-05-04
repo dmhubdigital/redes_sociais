@@ -31,16 +31,14 @@ def main():
                         st.write(f"**Nome:** {produto['title']}")
                         st.write(f"**Preço:** R${produto['price']:.2f}")
                         st.write(f"**Link:** {produto['permalink']}")
-                        st.write(f"**Número de Avaliações:** {produto['reviews']['total'] if 'reviews' in produto else '-'}")
-                        st.write(f"**Nota:** {produto['reviews']['rating_average'] if 'reviews' in produto else '-'}")
                         st.image(produto['thumbnail'], caption='Thumbnail do Produto', use_column_width=True)
                 else:
                     st.write("Nenhum produto encontrado para esta palavra-chave.")
         else:
             st.warning("Por favor, insira pelo menos uma palavra-chave para buscar produtos.")
 
-# Agendando a execução da função main a cada 1 minuto
-schedule.every(1).minutes.do(main)
+# Agendando a execução da função main a cada 1 hora
+schedule.every(1).hour.do(main)
 
 # Loop para executar a função main
 while True:
