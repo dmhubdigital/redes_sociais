@@ -9,8 +9,16 @@ def extrair_resultados_youtube(termo):
     url = f"https://www.youtube.com/results?search_query={termo}"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
-    resultados = soup.find_all("div", {"class": "text-wrapper style-scope ytd-video-renderer"})
-    return resultados
+    scripts = soup.find_all("script")
+    for script in scripts:
+        if "window['ytInitialData']" in str(script):
+            data = str(script)
+            break
+    data = data.split("window['ytInitialData'] = ")[1]
+    data = data.split(";</script>")[0]
+    json_data = json.loads(data)
+    results = json_data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
+    return results
 
 # Função para extrair o número de inscritos do canal
 def extrair_inscritos_canal(canal):
@@ -51,15 +59,15 @@ if st.button("Buscar"):
         resultados = extrair_resultados_youtube(termo_pesquisa)
         st.write("Resultados:")
         for resultado in resultados:
-            titulo = resultado.find("a", {"id": "video-title"})
-            visualizacoes = resultado.find("span", {"class": "style-scope ytd-video-meta-block"})
-            canal = resultado.find("div", {"id": "channel-info"})
+            titulo = resultado.get("title")
+            visualizacoes = resultado.get("viewCountText")
+            canal = resultado.get("longBylineText")
             inscritos = extrair_inscritos_canal(canal)
-            tempo_publicacao = resultado.find("span", {"class": "style-scope ytd-video-meta-block"})
+            tempo_publicacao = resultado.get("publishedTimeText")
             tempo_publicacao = extrair_tempo_publicacao(tempo_publicacao)
-            st.write(f"Título: {titulo.text.strip()}")
-            st.write(f"Visualizações: {visualizacoes.text.strip()}")
-            st.write(f"Canal: {canal.text.strip()}")
+            st.write(f"Título: {titulo}")
+            st.write(f"Visualizações: {visualizacoes}")
+            st.write(f"Canal: {canal}")
             st.write(f"Inscritos: {inscritos}")
             st.write(f"Tempo desde a publicação: {tempo_publicacao}")
             st.write("---")
