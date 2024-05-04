@@ -31,6 +31,8 @@ def main():
                         st.write(f"**Nome:** {produto['title']}")
                         st.write(f"**Preço:** R${produto['price']:.2f}")
                         st.write(f"**Link:** {produto['permalink']}")
+                        st.write(f"**Número de Avaliações:** {produto['reviews']['total'] if 'reviews' in produto else '-'}")
+                        st.write(f"**Nota:** {produto['reviews']['rating_average'] if 'reviews' in produto else '-'}")
                         st.image(produto['thumbnail'], caption='Thumbnail do Produto', use_column_width=True)
                 else:
                     st.write("Nenhum produto encontrado para esta palavra-chave.")
