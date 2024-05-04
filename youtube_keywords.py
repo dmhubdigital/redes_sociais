@@ -8,7 +8,7 @@ def extrair_resultados_youtube(termo):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     resultados = soup.find_all("h3", {"class": "title-and-badge style-scope ytd-video-renderer"})
-    return [resultado.text.strip() for resultado in resultados]
+    return resultados
 
 # Configurações da aplicação Streamlit
 st.title("Extrator de Resultados do YouTube")
@@ -22,6 +22,6 @@ if st.button("Buscar"):
         resultados = extrair_resultados_youtube(termo_pesquisa)
         st.write("Resultados:")
         for resultado in resultados:
-            st.write(resultado)
+            st.write(resultado.text.strip())
     else:
         st.write("Por favor, insira um termo de pesquisa.")
