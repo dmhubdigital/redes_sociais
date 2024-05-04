@@ -21,15 +21,6 @@ def conectar_mysql():
         database="seu_banco_de_dados"
     )
 
-# Função para conectar ao banco de dados PostgreSQL
-def conectar_postgresql():
-    return psycopg2.connect(
-        dbname="seu_banco_de_dados",
-        user="seu_usuario",
-        password="sua_senha",
-        host="seu_host"
-    )
-
 # Configurações da aplicação Streamlit
 st.title("Extrator de Resultados do YouTube")
 
@@ -46,10 +37,8 @@ if st.button("Buscar"):
     else:
         st.write("Por favor, insira um termo de pesquisa.")
 
-# Conexão ao banco de dados selecionado
-if tipo_banco_dados == "MySQL":
-    conexao = conectar_mysql()
-    st.write("Conexão ao MySQL estabelecida.")
+
+
 
 # Exemplo de código para inserir dados no banco de dados
 # cursor = conexao.cursor()
