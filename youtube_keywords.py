@@ -10,7 +10,7 @@ def extrair_resultados_youtube(termo):
         url = f"https://www.youtube.com/results?search_query={termo}"
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
-        results = soup.find_all("div", class_="style-scope ytd-section-list-renderer")
+        results = soup.find_all("div", class_="style-scope ytd-video-renderer")
         return results
     except Exception as e:
         st.error(f"Erro ao extrair resultados do YouTube: {e}")
