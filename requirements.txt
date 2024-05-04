@@ -2,3 +2,4 @@ streamlit
 instaloader
 requests
 schedule
+tabulate
