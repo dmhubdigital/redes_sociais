@@ -1,6 +1,7 @@
 import requests
 import schedule
 import time
+from tabulate import tabulate
 
 # Função para buscar produtos no Mercado Livre
 def buscar_produtos(palavra_chave):
@@ -19,11 +20,10 @@ def main():
         produtos = buscar_produtos(palavra_chave)
         if produtos:
             print(f"Total de produtos encontrados: {len(produtos)}")
+            table = []
             for produto in produtos:
-                print("---")
-                print(f"Nome: {produto['title']}")
-                print(f"Preço: R${produto['price']:.2f}")
-                print(f"Link: {produto['permalink']}")
+                table.append([produto['title'], f"R${produto['price']:.2f}", produto['permalink'], f"![Thumbnail do Produto]({produto['thumbnail']})"])
+            print(tabulate(table, headers=['Nome', 'Preço', 'Link', 'Thumbnail'], tablefmt='grid'))
         else:
             print("Nenhum produto encontrado para esta palavra-chave.")
 
