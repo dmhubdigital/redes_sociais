@@ -2,7 +2,7 @@
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
-import mysql.connector
+import mysql.connector 
 
 # Função para extrair os resultados da pesquisa do YouTube
 def extrair_resultados_youtube(termo):
