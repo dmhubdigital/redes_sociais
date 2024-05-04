@@ -3,7 +3,6 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import mysql.connector
-import psycopg2
 
 # Função para extrair os resultados da pesquisa do YouTube
 def extrair_resultados_youtube(termo):
@@ -47,16 +46,10 @@ if st.button("Buscar"):
     else:
         st.write("Por favor, insira um termo de pesquisa.")
 
-# Configuração para selecionar o tipo de banco de dados
-tipo_banco_dados = st.radio("Selecione o tipo de banco de dados:", ("MySQL", "PostgreSQL"))
-
 # Conexão ao banco de dados selecionado
 if tipo_banco_dados == "MySQL":
     conexao = conectar_mysql()
     st.write("Conexão ao MySQL estabelecida.")
-elif tipo_banco_dados == "PostgreSQL":
-    conexao = conectar_postgresql()
-    st.write("Conexão ao PostgreSQL estabelecida.")
 
 # Exemplo de código para inserir dados no banco de dados
 # cursor = conexao.cursor()
