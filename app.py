@@ -1,48 +1,33 @@
 import streamlit as st
-import instaloader
+import requests
 
-def extrair_metricas(usuario):
-    # Inicializa o instaloader
-    loader = instaloader.Instaloader()
-
-    try:
-        # Carrega o perfil do usuário
-        profile = instaloader.Profile.from_username(loader.context, usuario)
-
-        # Extrai as métricas
-        seguidores = profile.followers
-        num_posts = profile.mediacount
-
-        # Calcula a média de curtidas e comentários por post
-        total_curtidas = 0
-        total_comentarios = 0
-        for post in profile.get_posts():
-            total_curtidas += post.likes
-            total_comentarios += post.comments
-        media_curtidas = total_curtidas / num_posts if num_posts > 0 else 0
-        media_comentarios = total_comentarios / num_posts if num_posts > 0 else 0
-
-        return seguidores, num_posts, media_curtidas, media_comentarios
-
-    except instaloader.exceptions.ProfileNotExistsException:
-        st.error("O perfil não existe.")
+# Função para buscar produtos no Mercado Livre
+def buscar_produtos(palavra_chave):
+    url = f"https://api.mercadolibre.com/sites/MLB/search?q={palavra_chave}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()["results"]
+    else:
         return None
 
 # Interface do Streamlit
-st.title("Extrator de Métricas do Instagram")
-usuario = st.text_input("Digite o nome de usuário do Instagram:")
+st.title("Extrator de Produtos do Mercado Livre")
 
-if st.button("Extrair Métricas"):
-    if usuario:
-        # Extrai as métricas
-        metricas = extrair_metricas(usuario)
-        if metricas:
-            seguidores, num_posts, media_curtidas, media_comentarios = metricas
-
-            # Exibe as métricas
-            st.write(f"Seguidores: {seguidores}")
-            st.write(f"Número de Posts: {num_posts}")
-            st.write(f"Média de Curtidas por Post: {media_curtidas:.2f}")
-            st.write(f"Média de Comentários por Post: {media_comentarios:.2f}")
+# Entrada do usuário
+palavra_chave = st.text_input("Digite o nome do produto ou palavra-chave:")
+if st.button("Buscar Produtos"):
+    if palavra_chave:
+        st.write(f"Buscando produtos relacionados à '{palavra_chave}'...")
+        produtos = buscar_produtos(palavra_chave)
+        if produtos:
+            st.write(f"Total de produtos encontrados: {len(produtos)}")
+            for produto in produtos:
+                st.write("---")
+                st.write(f"**Nome:** {produto['title']}")
+                st.write(f"**Preço:** R${produto['price']:.2f}")
+                st.write(f"**Link:** {produto['permalink']}")
+                st.image(produto['thumbnail'], caption='Thumbnail do Produto', use_column_width=True)
+        else:
+            st.write("Nenhum produto encontrado.")
     else:
-        st.warning("Por favor, insira um nome de usuário do Instagram.")
+        st.warning("Por favor, insira uma palavra-chave para buscar produtos.")
