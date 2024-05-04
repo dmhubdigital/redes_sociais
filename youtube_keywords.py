@@ -63,4 +63,20 @@ if st.button("Buscar"):
             for resultado in resultados:
                 try:
                     titulo = resultado.find("a", {"id": "video-title"}).text.strip()
-                    visualizacoes = resultado.find("span", {"class": "style-scope ytd-video-meta-blo
+                    visualizacoes = resultado.find("span", {"class": "style-scope ytd-video-meta-block"}).text.strip()
+                    canal = resultado.find("a", {"class": "yt-simple-endpoint style-scope yt-formatted-string"}).text.strip()
+                    inscritos = extrair_inscritos_canal(resultado.find("div", {"id": "channel-info"}))
+                    tempo_publicacao = resultado.find("span", {"class": "style-scope ytd-video-meta-block"}).text.strip()
+                    tempo_publicacao = extrair_tempo_publicacao(tempo_publicacao)
+                    st.write(f"Título: {titulo}")
+                    st.write(f"Visualizações: {visualizacoes}")
+                    st.write(f"Canal: {canal}")
+                    st.write(f"Inscritos: {inscritos}")
+                    st.write(f"Tempo desde a publicação: {tempo_publicacao}")
+                    st.write("---")
+                except Exception as e:
+                    st.error(f"Erro ao processar resultado: {e}")
+        else:
+            st.write("Nenhum resultado encontrado.")
+    else:
+        st.write("Por favor, insira um termo de pesquisa.")
