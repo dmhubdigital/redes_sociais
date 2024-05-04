@@ -22,8 +22,17 @@ def main():
             print(f"Total de produtos encontrados: {len(produtos)}")
             table = []
             for produto in produtos:
-                table.append([produto['title'], f"R${produto['price']:.2f}", produto['permalink'], f"![Thumbnail do Produto]({produto['thumbnail']})"])
-            print(tabulate(table, headers=['Nome', 'Preço', 'Link', 'Thumbnail'], tablefmt='grid'))
+                frete_gratis = 'Sim' if 'shipping' in produto and produto['shipping']['free_shipping'] else 'Não'
+                table.append([
+                    produto['title'],
+                    f"R${produto['price']:.2f}",
+                    produto['permalink'],
+                    f"![Thumbnail do Produto]({produto['thumbnail']})",
+                    produto['reviews']['rating_average'] if 'reviews' in produto else '-',
+                    produto['reviews']['total'] if 'reviews' in produto else '-',
+                    frete_gratis
+                ])
+            print(tabulate(table, headers=['Nome', 'Preço', 'Link', 'Thumbnail', 'Nota', 'Avaliações', 'Frete Grátis'], tablefmt='grid'))
         else:
             print("Nenhum produto encontrado para esta palavra-chave.")
 
