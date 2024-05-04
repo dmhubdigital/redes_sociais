@@ -14,9 +14,10 @@ def buscar_produtos(palavra_chave):
 st.title("Extrator de Produtos do Mercado Livre")
 
 # Entrada do usuário
-palavras_chave = st.multiselect("Selecione até 50 palavras-chave:", [])
+palavras_chave = st.text_input("Digite as palavras-chave separadas por vírgula:")
 if st.button("Buscar Produtos"):
     if palavras_chave:
+        palavras_chave = [palavra.strip() for palavra in palavras_chave.split(",")]
         for palavra_chave in palavras_chave:
             st.write(f"## Resultados para '{palavra_chave}':")
             produtos = buscar_produtos(palavra_chave)
@@ -31,4 +32,4 @@ if st.button("Buscar Produtos"):
             else:
                 st.write("Nenhum produto encontrado para esta palavra-chave.")
     else:
-        st.warning("Por favor, selecione pelo menos uma palavra-chave para buscar produtos.")
+        st.warning("Por favor, insira pelo menos uma palavra-chave para buscar produtos.")
